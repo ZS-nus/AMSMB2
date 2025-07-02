@@ -61,6 +61,7 @@ let package = Package(
                 .unsafeFlags(["-Xfrontend", "-suppress-concurrency-warnings"], .when(configuration: .debug)),
                 .unsafeFlags(["-Xfrontend", "-suppress-concurrency-warnings"], .when(configuration: .release)),
                 .enableExperimentalFeature("StrictConcurrency=complete"),
+                .enableUpcomingFeature("ExistentialAny"),
             ]
         ),
         .testTarget(
@@ -73,10 +74,3 @@ let package = Package(
         ),
     ]
 )
-
-for target in package.targets {
-    let swiftSettings: [SwiftSetting] = [
-        .enableUpcomingFeature("ExistentialAny"),
-    ]
-    target.swiftSettings = swiftSettings
-}

@@ -60,6 +60,11 @@ let package = Package(
                 .unsafeFlags(["-Xfrontend", "-suppress-concurrency-warnings"], .when(configuration: .debug)),
                 .unsafeFlags(["-Xfrontend", "-suppress-concurrency-warnings"], .when(configuration: .release)),
                 .enableExperimentalFeature("StrictConcurrency=complete"),
+                // Add ExistentialAny only for Swift 5.9+
+                // This must be inside the array, not in a loop at the end!
+                #if swift(>=5.9)
+                .enableUpcomingFeature("ExistentialAny"),
+                #endif
             ]
         ),
         .testTarget(
@@ -73,13 +78,3 @@ let package = Package(
     ],
     swiftLanguageVersions: [.v5]
 )
-
-for target in package.targets {
-    var swiftSettings: [SwiftSetting] = [
-        .enableExperimentalFeature("StrictConcurrency=complete"),
-    ]
-#if swift(>=5.9)
-    swiftSettings.append(.enableUpcomingFeature("ExistentialAny"))
-#endif
-    target.swiftSettings = swiftSettings
-}
