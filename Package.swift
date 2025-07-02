@@ -54,7 +54,13 @@ let package = Package(
             dependencies: [
                 "libsmb2",
             ],
-            path: "AMSMB2"
+            path: "AMSMB2",
+            swiftSettings: [
+                .unsafeFlags(["-Xfrontend", "-disable-availability-checking"]),
+                .unsafeFlags(["-Xfrontend", "-suppress-concurrency-warnings"], .when(configuration: .debug)),
+                .unsafeFlags(["-Xfrontend", "-suppress-concurrency-warnings"], .when(configuration: .release)),
+                .enableExperimentalFeature("StrictConcurrency=complete"),
+            ]
         ),
         .testTarget(
             name: "AMSMB2Tests",
